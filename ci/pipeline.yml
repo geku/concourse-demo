@@ -17,7 +17,7 @@ resources:
   type: docker-image
   source:
     repository: ruby
-    tag: "2.3.1"
+    tag: '2.3.1'
 
 jobs:
 - name: build-concourse-demo
@@ -38,8 +38,10 @@ jobs:
   plan:
   - get: concourse-demo-image
     passed: [build-concourse-demo]
-  - task:
-    run:
-      path: ruby
-      args:
-      - ./ruby.rb
+  - task: run-test
+    image: concourse-demo-image
+    config:
+      platform: linux
+      run:
+        path: ruby
+        args: ['./test.rb']
