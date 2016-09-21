@@ -1,0 +1,38 @@
+resources:
+- name: concourse-demo-git
+  type: git
+  source:
+    uri: https://github.com/geku/concourse-demo.git
+    branch: master
+
+- name: concourse-demo-image
+  type: docker-image
+  source:
+    repository: geku/concourse-demo-image
+    username: {{docker-username}}
+    email: {{docker-email}}
+    password: {{docker-password}}
+
+- name: ruby-base-image
+  type: docker-image
+  source:
+    repository: ruby
+    tag: "2.3.1"
+
+jobs:
+- name: build-concourse-demo
+  public: true
+  serial: true
+  plan:
+  - aggregate:
+    - get: concourse-demo-git
+      trigger: true
+    - get: ruby-base-image
+      trigger: true
+      params:
+        save: true
+  - put: concourse-demo-image
+    params:
+      load_base: ruby-base-image
+      build: concourse-demo-git/
+
