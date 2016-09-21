@@ -37,6 +37,7 @@ jobs:
 - name: run-test
   plan:
   - get: concourse-demo-image
+    trigger: true
     passed: [build-concourse-demo]
   - task: run-test
     image: concourse-demo-image
