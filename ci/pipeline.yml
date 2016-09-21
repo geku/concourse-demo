@@ -21,8 +21,6 @@ resources:
 
 jobs:
 - name: build-concourse-demo
-  public: true
-  serial: true
   plan:
   - aggregate:
     - get: concourse-demo-git
@@ -36,3 +34,12 @@ jobs:
       load_base: ruby-base-image
       build: concourse-demo-git/
 
+- name: run-test
+  plan:
+  - get: concourse-demo-image
+    passed: [build-concourse-demo]
+  - task:
+    run:
+      path: ruby
+      args:
+      - ./ruby.rb
