@@ -45,4 +45,5 @@ jobs:
       platform: linux
       run:
         path: ruby
-        args: ['./test.rb']
+        args:
+        - /usr/src/app/test.rb
